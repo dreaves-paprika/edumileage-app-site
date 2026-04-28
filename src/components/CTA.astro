@@ -11,8 +11,9 @@
       </p>
 
       <form
+        id="notify-form"
         class="mt-8 flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
-        action="https://formspree.io/f/REPLACE_ME"
+        action="/api/notify"
         method="POST"
       >
         <input
@@ -20,6 +21,7 @@
           name="email"
           placeholder="you@yourschool.edu"
           required
+          autocomplete="email"
           class="flex-1 px-5 py-3.5 rounded-full text-slate-900 placeholder:text-slate-400 ring-1 ring-white/30 focus:ring-2 focus:ring-white focus:outline-none"
         />
         <button
@@ -29,9 +31,53 @@
           Notify me
         </button>
       </form>
-      <p class="mt-4 text-sm text-brand-200">
+
+      <div id="notify-success" class="hidden mt-8 max-w-md mx-auto bg-white/10 backdrop-blur rounded-2xl p-6 ring-1 ring-white/20">
+        <div class="flex items-start gap-3">
+          <svg class="w-6 h-6 text-white flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          <div class="text-left">
+            <p class="font-semibold text-white">You're on the list.</p>
+            <p class="text-sm text-brand-100 mt-1">We'll send a single email the day EDU Mileage+ goes live. Thanks for the interest.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="notify-error" class="hidden mt-8 max-w-md mx-auto bg-red-500/20 backdrop-blur rounded-2xl p-6 ring-1 ring-red-300/30">
+        <div class="flex items-start gap-3">
+          <svg class="w-6 h-6 text-white flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M5 19h14a2 2 0 001.732-3L13.732 4a2 2 0 00-3.464 0L3.268 16A2 2 0 005 19z" />
+          </svg>
+          <div class="text-left">
+            <p class="font-semibold text-white">Something went wrong.</p>
+            <p class="text-sm text-brand-100 mt-1">Please try again, or email <a href="mailto:support@eduplusapps.com" class="underline">support@eduplusapps.com</a> directly.</p>
+          </div>
+        </div>
+      </div>
+
+      <p id="notify-fineprint" class="mt-4 text-sm text-brand-200">
         We'll only ever email you about EDU Mileage+. Your email never leaves our system.
       </p>
     </div>
   </div>
 </section>
+
+<script>
+  // Show success / error state after the Worker redirects back with a query param.
+  const params = new URLSearchParams(window.location.search);
+  const status = params.get('notified');
+  if (status === 'ok' || status === 'error') {
+    const form = document.getElementById('notify-form');
+    const fineprint = document.getElementById('notify-fineprint');
+    const target = document.getElementById(status === 'ok' ? 'notify-success' : 'notify-error');
+    if (form) form.classList.add('hidden');
+    if (fineprint) fineprint.classList.add('hidden');
+    if (target) target.classList.remove('hidden');
+    // Clean the URL so a refresh doesn't keep showing the message.
+    if (window.history.replaceState) {
+      const cleanUrl = window.location.pathname + window.location.hash;
+      window.history.replaceState({}, '', cleanUrl);
+    }
+  }
+</script>

@@ -1,10 +1,20 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "edumileage-app-site",
+  "main": "src/worker.ts",
   "compatibility_date": "2026-04-27",
+  "compatibility_flags": ["nodejs_compat"],
   "assets": {
-    "directory": "./dist"
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page"
   },
+  "kv_namespaces": [
+    {
+      "binding": "WAITLIST",
+      "id": "459b678b89e3436eb5cea10d3a6d86cf"
+    }
+  ],
   "observability": {
     "enabled": true
   }
