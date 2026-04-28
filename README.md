@@ -57,4 +57,41 @@ public/
 
 ## Email capture
 
-The CTA form posts to `https://formspree.io/f/REPLACE_ME`. You'll need to create a Formspree form (or any other form provider — Web3Forms, Netlify Forms, custom Worker, etc.) and replace the placeholder in `src/components/CTA.astro`.
+The CTA form posts to `/api/notify`, handled by the Worker entry at `src/worker.ts`. Submissions are written to the Cloudflare KV namespace `edumileage-waitlist` (id `459b678b89e3436eb5cea10d3a6d86cf`).
+
+Hardening in place:
+- Origin / Referer must match `edumileage.app` or `www.edumileage.app`
+- Per-IP rate limit: one submission per 30 seconds (KV TTL)
+- Honeypot field (`name="website"`) silently rejects naive bots
+- Body capped at 2 KB
+- All responses get HSTS, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `X-Frame-Options`
+
+Inspecting submissions:
+```bash
+# CLI
+npx wrangler kv:key list --namespace-id=459b678b89e3436eb5cea10d3a6d86cf
+
+# Or via dashboard:
+# Cloudflare → Workers & Pages → Storage & Databases → KV → edumileage-waitlist
+```
+
+## Asset generation scripts
+
+Re-run these after updating the icon, headline, or screenshots:
+
+```bash
+node scripts/generate-og.mjs           # public/og-image.png (1200x630)
+node scripts/optimize-screenshots.mjs  # public/screenshots/*.png -> .webp
+```
+
+## Cloudflare deployment configuration
+
+Build configuration set in the Cloudflare dashboard:
+
+| Field | Value |
+|---|---|
+| Build command | `npm run build` |
+| Deploy command | `npm run build && npx wrangler deploy` |
+| Root directory | (default) |
+
+`wrangler.jsonc` declares the entry point (`src/worker.ts`), the static assets directory (`./dist`), the KV binding (`WAITLIST`), and `nodejs_compat` for the Worker runtime.
