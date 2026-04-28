@@ -1,0 +1,82 @@
+---
+---
+<section id="top" class="relative pt-32 pb-20 overflow-hidden bg-gradient-to-b from-brand-50/60 via-white to-white">
+  <!-- Decorative background -->
+  <div class="absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-gradient-radial from-brand-200/40 via-transparent to-transparent blur-3xl"></div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <!-- Left: copy -->
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-100 text-brand-800 text-xs font-semibold tracking-wide uppercase mb-6">
+          <span class="w-1.5 h-1.5 rounded-full bg-brand-600 animate-pulse"></span>
+          Coming soon to the App Store
+        </div>
+
+        <h1 class="font-display text-5xl md:text-6xl lg:text-7xl font-bold tracking-tightest text-slate-900 leading-[1.05]">
+          Mileage tracking<br />
+          <span class="text-brand-700">built for K-12 educators.</span>
+        </h1>
+
+        <p class="mt-6 text-lg md:text-xl text-slate-600 leading-relaxed max-w-xl">
+          Automatically log every reimbursable mile between school sites. Built for the way district reimbursement actually works — IRS rates, multi-district support, approved distances, and audit-ready reports.
+        </p>
+
+        <div class="mt-10 flex flex-col sm:flex-row gap-3">
+          <a href="#cta" class="inline-flex items-center justify-center gap-2 bg-brand-700 hover:bg-brand-800 text-white font-semibold px-7 py-3.5 rounded-full text-base transition shadow-lg shadow-brand-900/10 hover:shadow-xl hover:shadow-brand-900/20">
+            Get notified at launch
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </a>
+          <a href="#how-it-works" class="inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-900 font-semibold px-7 py-3.5 rounded-full text-base transition border border-slate-300">
+            See how it works
+          </a>
+        </div>
+
+        <p class="mt-6 text-sm text-slate-500">
+          Free trial · No credit card to start · Cancel anytime
+        </p>
+      </div>
+
+      <!-- Right: video / phone mockup -->
+      <div class="relative">
+        <div class="relative mx-auto max-w-[320px] aspect-[886/1920] bg-slate-900 rounded-[3rem] p-2 shadow-2xl shadow-brand-900/20 ring-1 ring-slate-900/10">
+          <div class="absolute inset-2 rounded-[2.6rem] overflow-hidden bg-slate-100">
+            <video
+              autoplay
+              loop
+              muted
+              playsinline
+              preload="metadata"
+              class="w-full h-full object-cover"
+              poster="/screenshots/01_Dashboard.png"
+            >
+              <source src="/video/Demo-final.mov" type="video/quicktime" />
+              <source src="/video/Demo-final.mov" type="video/mp4" />
+              <!-- Fallback poster shown if video doesn't load -->
+            </video>
+          </div>
+          <!-- Phone hardware accents -->
+          <div class="absolute top-4 left-1/2 -translate-x-1/2 w-24 h-6 bg-slate-900 rounded-full"></div>
+        </div>
+
+        <!-- Floating glass cards -->
+        <div class="hidden md:block absolute -left-8 top-20 bg-white/90 backdrop-blur rounded-2xl shadow-lg ring-1 ring-slate-900/5 px-4 py-3 max-w-[200px]">
+          <div class="flex items-center gap-2 text-xs text-slate-500 font-medium mb-1">
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            Tracking active
+          </div>
+          <div class="text-sm font-semibold text-slate-900">3 trips today</div>
+          <div class="text-xs text-slate-600">28.4 mi · $20.59 reimbursable</div>
+        </div>
+
+        <div class="hidden md:block absolute -right-8 bottom-24 bg-white/90 backdrop-blur rounded-2xl shadow-lg ring-1 ring-slate-900/5 px-4 py-3 max-w-[200px]">
+          <div class="text-xs text-slate-500 font-medium mb-1">Latest trip</div>
+          <div class="text-sm font-semibold text-slate-900 truncate">Lincoln Elementary → District Office</div>
+          <div class="text-xs text-slate-600">8.2 mi · auto-detected</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

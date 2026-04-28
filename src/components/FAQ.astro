@@ -1,0 +1,84 @@
+---
+const faqs = [
+  {
+    q: "What does EDU Mileage+ actually do?",
+    a: "EDU Mileage+ tracks the miles you drive between your district's school sites and automatically builds reimbursement reports. When you leave one registered site and arrive at another, the app logs the trip — including the GPS-measured route — without any manual input. You can also log trips manually, review everything before approving a report, and export to PDF or CSV for submission.",
+  },
+  {
+    q: "How does the free trial work?",
+    a: "You get 30 trips and 35 days of full access from the moment you first install the app — whichever limit you hit first ends the trial. All features are available during the trial with no restrictions. You can subscribe at any time during or after the trial.",
+  },
+  {
+    q: "What does a subscription include?",
+    a: "A subscription includes one district with unlimited trips, automatic trip detection, report generation, and PDF/CSV export. Monthly and annual plans are available. The annual plan works out to about 33% less per month than monthly billing.",
+  },
+  {
+    q: "Why does the app need my location all the time?",
+    a: "Trip detection uses geofencing — iOS monitors invisible boundaries around each of your registered sites. When your device crosses one of those boundaries, the app wakes up and records the departure or arrival. This works even when the app is closed, but it requires Always location access. Without it, the app only knows your location when you have it open, which means most automatic trips would be missed.",
+  },
+  {
+    q: "Is my location data shared with anyone?",
+    a: "No. Your location data stays on your device and in your private iCloud account. EDU Mileage+ does not collect, transmit, or share your GPS data. iCloud sync uses Apple's private CloudKit container, which only you can access.",
+  },
+  {
+    q: "Does the app drain my battery?",
+    a: "Geofencing is designed by Apple to be very battery-efficient — iOS handles boundary detection at the system level using low-power hardware. Active GPS tracking only runs while you are driving between sites, and automatically switches to a lower-power mode when your device detects you have stopped. In practice, most users see no noticeable difference in daily battery life.",
+  },
+  {
+    q: "How does the app know when a trip starts and ends?",
+    a: "When you leave a registered site, iOS delivers a geofence exit event and the app begins recording. It tracks your route using GPS and accumulates miles as you drive. When you arrive at another registered site and remain there for at least 60 seconds, the app confirms the arrival and saves the completed trip. The 60-second wait prevents false trips from drive-bys.",
+  },
+  {
+    q: "What is the IRS Annual Report?",
+    a: "The IRS Annual Report is a cross-district summary of all your reimbursable trips for a full tax year. It shows GPS miles, approved miles, and any unreimbursed miles for each trip — useful for documenting unreimbursed business expenses on your tax return. It exports to PDF and CSV.",
+  },
+  {
+    q: "What is the District Add-On?",
+    a: "If you work across multiple school districts, you can add each additional district for $1.99/month. Each add-on unlocks full tracking and reporting for one additional district. Add-ons are managed inside the app under Settings → Subscription.",
+  },
+  {
+    q: "Is there a limit to how many sites I can have?",
+    a: "You can add as many sites as you like, but iOS limits each app to 20 active geofences at a time. EDU Mileage+ handles this automatically — it always keeps the 20 sites nearest to your current location active and updates the monitored set as you move.",
+  },
+  {
+    q: "What if a trip didn't get logged?",
+    a: "Use the Log a Trip Manually button on the Dashboard or the + button on the Trips tab. You can set the date, start and end sites, miles, purpose, and notes. The app can also auto-calculate the Apple Maps driving distance for the route.",
+  },
+  {
+    q: "How do I cancel my subscription?",
+    a: "Subscriptions are managed through Apple. Go to iOS Settings → your name → Subscriptions, find EDU Mileage+, and tap Cancel Subscription. Your access continues until the end of the current billing period.",
+  },
+];
+---
+<section id="faq" class="py-20 md:py-28 bg-slate-50">
+  <div class="max-w-3xl mx-auto px-6">
+    <div class="text-center mb-14">
+      <p class="text-sm font-semibold tracking-widest uppercase text-brand-700 mb-3">
+        Frequently asked
+      </p>
+      <h2 class="font-display text-4xl md:text-5xl font-bold tracking-tight text-slate-900">
+        Questions answered.
+      </h2>
+    </div>
+
+    <div class="space-y-3">
+      {faqs.map((item) => (
+        <details class="group bg-white rounded-2xl ring-1 ring-slate-200 hover:ring-brand-300 transition overflow-hidden">
+          <summary class="cursor-pointer px-6 py-5 font-display font-semibold text-slate-900 flex items-center justify-between gap-4 list-none [&::-webkit-details-marker]:hidden">
+            <span>{item.q}</span>
+            <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </summary>
+          <div class="px-6 pb-5 text-slate-600 leading-relaxed">
+            {item.a}
+          </div>
+        </details>
+      ))}
+    </div>
+
+    <p class="mt-10 text-center text-sm text-slate-500">
+      More questions? <a href="https://eduplusapps.com/support/" class="text-brand-700 font-semibold hover:underline">Visit Support</a> or email <a href="mailto:support@eduplusapps.com" class="text-brand-700 font-semibold hover:underline">support@eduplusapps.com</a>.
+    </p>
+  </div>
+</section>
