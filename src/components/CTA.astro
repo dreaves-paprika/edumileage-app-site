@@ -22,19 +22,30 @@
           placeholder="you@yourschool.edu"
           required
           autocomplete="email"
+          aria-label="Email address"
           class="flex-1 px-5 py-3.5 rounded-full text-slate-900 placeholder:text-slate-400 ring-1 ring-white/30 focus:ring-2 focus:ring-white focus:outline-none"
         />
+        <!-- Honeypot — humans leave this empty; bots fill everything. -->
+        <input
+          type="text"
+          name="website"
+          tabindex="-1"
+          autocomplete="off"
+          aria-hidden="true"
+          style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;"
+        />
         <button
+          id="notify-submit"
           type="submit"
-          class="bg-white hover:bg-slate-50 text-brand-900 font-semibold px-7 py-3.5 rounded-full transition shadow-lg"
+          class="bg-white hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-900 text-brand-900 font-semibold px-7 py-3.5 rounded-full transition shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Notify me
         </button>
       </form>
 
-      <div id="notify-success" class="hidden mt-8 max-w-md mx-auto bg-white/10 backdrop-blur rounded-2xl p-6 ring-1 ring-white/20">
+      <div id="notify-success" class="hidden mt-8 max-w-md mx-auto bg-white/10 backdrop-blur rounded-2xl p-6 ring-1 ring-white/20" role="status" aria-live="polite">
         <div class="flex items-start gap-3">
-          <svg class="w-6 h-6 text-white flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-6 h-6 text-white flex-shrink-0 mt-0.5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
           </svg>
           <div class="text-left">
@@ -44,9 +55,9 @@
         </div>
       </div>
 
-      <div id="notify-error" class="hidden mt-8 max-w-md mx-auto bg-red-500/20 backdrop-blur rounded-2xl p-6 ring-1 ring-red-300/30">
+      <div id="notify-error" class="hidden mt-8 max-w-md mx-auto bg-red-500/20 backdrop-blur rounded-2xl p-6 ring-1 ring-red-300/30" role="alert">
         <div class="flex items-start gap-3">
-          <svg class="w-6 h-6 text-white flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-6 h-6 text-white flex-shrink-0 mt-0.5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M5 19h14a2 2 0 001.732-3L13.732 4a2 2 0 00-3.464 0L3.268 16A2 2 0 005 19z" />
           </svg>
           <div class="text-left">
@@ -79,5 +90,16 @@
       const cleanUrl = window.location.pathname + window.location.hash;
       window.history.replaceState({}, '', cleanUrl);
     }
+  }
+
+  // Disable the submit button during submission to prevent double-posts.
+  const form = document.getElementById('notify-form') as HTMLFormElement | null;
+  const submitButton = document.getElementById('notify-submit') as HTMLButtonElement | null;
+  if (form && submitButton) {
+    form.addEventListener('submit', () => {
+      submitButton.disabled = true;
+      submitButton.setAttribute('aria-busy', 'true');
+      submitButton.textContent = 'Submitting…';
+    });
   }
 </script>

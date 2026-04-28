@@ -56,7 +56,7 @@ const features = [
     <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
       {features.map((f) => (
         <div class="bg-white rounded-2xl p-6 ring-1 ring-slate-200/80 hover:ring-brand-300 hover:shadow-lg transition">
-          <div class="text-3xl mb-3">{f.icon}</div>
+          <div class="text-3xl mb-3" aria-hidden="true">{f.icon}</div>
           <h3 class="font-display font-bold text-slate-900 mb-2">{f.title}</h3>
           <p class="text-sm text-slate-600 leading-relaxed">{f.body}</p>
         </div>

@@ -31,11 +31,11 @@ const steps = [
     <div class="grid md:grid-cols-3 gap-8 md:gap-6 lg:gap-10">
       {steps.map((step) => (
         <div class="relative">
-          <div class="flex items-center justify-center w-14 h-14 rounded-2xl bg-brand-700 text-white font-display font-bold text-2xl mb-5 shadow-lg shadow-brand-900/15">
+          <div aria-hidden="true" class="flex items-center justify-center w-14 h-14 rounded-2xl bg-brand-700 text-white font-display font-bold text-2xl mb-5 shadow-lg shadow-brand-900/15">
             {step.n}
           </div>
           <h3 class="font-display text-xl md:text-2xl font-bold tracking-tight text-slate-900 mb-3">
-            {step.title}
+            <span class="sr-only">Step {step.n}: </span>{step.title}
           </h3>
           <p class="text-slate-600 leading-relaxed">
             {step.body}

@@ -5,6 +5,18 @@ const faqs = [
     a: "EDU Mileage+ tracks the miles you drive between your district's school sites and automatically builds reimbursement reports. When you leave one registered site and arrive at another, the app logs the trip — including the GPS-measured route — without any manual input. You can also log trips manually, review everything before approving a report, and export to PDF or CSV for submission.",
   },
   {
+    q: "How is this different from MileIQ or other mileage trackers?",
+    a: "EDU Mileage+ is built specifically for K-12 district reimbursement, not generic business mileage. That means multi-district support, district-specific approved distances per route, schedule-aware tracking that knows when you're on the clock, an IRS Annual Report formatted for tax filings, and exports that match what reimbursement forms actually need. Generic trackers can record trips, but they don't speak the language of district reimbursement.",
+  },
+  {
+    q: "Will my district accept the report I export?",
+    a: "Reports are exported as standard PDF or CSV with all the fields a typical reimbursement form requires: date, origin, destination, purpose, miles, mileage rate, and reimbursement amount, plus your name, job title, and district. The IRS Annual Report adds GPS, approved, and unreimbursed mile breakdowns for tax purposes. If your district uses a custom form, the CSV export gives you the source data to fill it out — and we're tracking specific district forms (like TCS) for future versions.",
+  },
+  {
+    q: "I'm not a teacher — does this work for paras, coaches, support staff, or admins?",
+    a: "Yes. The app was built for anyone employed by a school district who drives between sites for work. Paraeducators, special-education staff, coaches splitting time across campuses, district office personnel, custodial supervisors, IT staff, transportation coordinators — the use case is the same: log every reimbursable mile automatically and export it cleanly.",
+  },
+  {
     q: "How does the free trial work?",
     a: "You get 30 trips and 35 days of full access from the moment you first install the app — whichever limit you hit first ends the trial. All features are available during the trial with no restrictions. You can subscribe at any time during or after the trial.",
   },
@@ -66,7 +78,7 @@ const faqs = [
         <details class="group bg-white rounded-2xl ring-1 ring-slate-200 hover:ring-brand-300 transition overflow-hidden">
           <summary class="cursor-pointer px-6 py-5 font-display font-semibold text-slate-900 flex items-center justify-between gap-4 list-none [&::-webkit-details-marker]:hidden">
             <span>{item.q}</span>
-            <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition flex-shrink-0" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </summary>
@@ -78,7 +90,7 @@ const faqs = [
     </div>
 
     <p class="mt-10 text-center text-sm text-slate-500">
-      More questions? <a href="https://eduplusapps.com/support/" class="text-brand-700 font-semibold hover:underline">Visit Support</a> or email <a href="mailto:support@eduplusapps.com" class="text-brand-700 font-semibold hover:underline">support@eduplusapps.com</a>.
+      More questions? <a href="https://eduplusapps.com/support/" rel="noopener" class="text-brand-700 font-semibold hover:underline">Visit Support</a> or email <a href="mailto:support@eduplusapps.com" class="text-brand-700 font-semibold hover:underline">support@eduplusapps.com</a>.
     </p>
   </div>
 </section>

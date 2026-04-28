@@ -2,6 +2,13 @@
  * Cloudflare Worker entry — handles /api/notify POST for the launch
  * waitlist and proxies everything else to the static asset bundle
  * built by Astro into ./dist.
+ *
+ * Hardening:
+ *  - Origin / Referer must match the site host
+ *  - Per-IP rate limit (one write per 30 seconds, KV-backed)
+ *  - Honeypot field rejects naive bots
+ *  - Form payload capped at 2 KB
+ *  - Security headers added to all responses
  */
 
 interface Env {
@@ -9,29 +16,73 @@ interface Env {
   WAITLIST: KVNamespace;
 }
 
+const ALLOWED_HOSTS = new Set(['edumileage.app', 'www.edumileage.app']);
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MAX_BODY_BYTES = 2 * 1024;
+const RATE_LIMIT_WINDOW_SECONDS = 30;
+
+const SECURITY_HEADERS: Record<string, string> = {
+  'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
+  'X-Content-Type-Options': 'nosniff',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Permissions-Policy': 'geolocation=(), camera=(), microphone=(), interest-cohort=()',
+  'X-Frame-Options': 'DENY',
+};
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
 
+    let response: Response;
+
     if (url.pathname === '/api/notify' && request.method === 'POST') {
-      return handleNotify(request, env);
+      response = await handleNotify(request, env);
+    } else {
+      response = await env.ASSETS.fetch(request);
     }
 
-    return env.ASSETS.fetch(request);
+    return withSecurityHeaders(response);
   },
 };
 
 async function handleNotify(request: Request, env: Env): Promise<Response> {
+  // Origin / Referer check — both should originate from our domain.
+  if (!isAllowedOrigin(request)) {
+    return redirect(request.url, '?notified=error');
+  }
+
+  // Cap payload size before parsing.
+  const lenHeader = request.headers.get('content-length');
+  if (lenHeader && Number(lenHeader) > MAX_BODY_BYTES) {
+    return redirect(request.url, '?notified=error');
+  }
+
+  // Per-IP rate limit — KV TTL key keyed by hashed IP.
+  const ip = request.headers.get('cf-connecting-ip') ?? '';
+  const rateKey = `ratelimit::${ip}`;
+  if (ip) {
+    const recent = await env.WAITLIST.get(rateKey);
+    if (recent !== null) {
+      return redirect(request.url, '?notified=error');
+    }
+  }
+
   let email = '';
+  let honeypot = '';
 
   try {
     const formData = await request.formData();
-    const raw = formData.get('email');
-    if (typeof raw === 'string') email = raw.trim().toLowerCase();
+    const rawEmail = formData.get('email');
+    const rawHoney = formData.get('website'); // honeypot — real users leave it empty
+    if (typeof rawEmail === 'string') email = rawEmail.trim().toLowerCase();
+    if (typeof rawHoney === 'string') honeypot = rawHoney.trim();
   } catch {
     return redirect(request.url, '?notified=error');
+  }
+
+  // Bots fill every field; humans never see this one.
+  if (honeypot.length > 0) {
+    return redirect(request.url, '?notified=ok#cta');
   }
 
   if (!email || email.length > 320 || !EMAIL_RE.test(email)) {
@@ -55,6 +106,13 @@ async function handleNotify(request: Request, env: Env): Promise<Response> {
 
   try {
     await env.WAITLIST.put(key, JSON.stringify(record));
+
+    if (ip) {
+      // Rate-limit token expires after the window; reads return null after.
+      await env.WAITLIST.put(rateKey, '1', {
+        expirationTtl: RATE_LIMIT_WINDOW_SECONDS,
+      });
+    }
   } catch {
     return redirect(request.url, '?notified=error');
   }
@@ -62,10 +120,54 @@ async function handleNotify(request: Request, env: Env): Promise<Response> {
   return redirect(request.url, '?notified=ok#cta');
 }
 
+function isAllowedOrigin(request: Request): boolean {
+  const origin = request.headers.get('origin');
+  if (origin) {
+    try {
+      const host = new URL(origin).host;
+      if (ALLOWED_HOSTS.has(host)) return true;
+    } catch {
+      return false;
+    }
+  }
+
+  const referer = request.headers.get('referer');
+  if (referer) {
+    try {
+      const host = new URL(referer).host;
+      if (ALLOWED_HOSTS.has(host)) return true;
+    } catch {
+      return false;
+    }
+  }
+
+  return false;
+}
+
 function redirect(currentUrl: string, search: string): Response {
   const dest = new URL(currentUrl);
   dest.pathname = '/';
-  dest.search = search.startsWith('?') ? search.split('#')[0] : '';
-  if (search.includes('#')) dest.hash = search.split('#')[1];
+  dest.search = '';
+  dest.hash = '';
+
+  const queryPart = search.split('#')[0] ?? '';
+  const hashPart = search.includes('#') ? search.split('#')[1] : '';
+
+  if (queryPart && queryPart.startsWith('?')) {
+    dest.search = queryPart.slice(1);
+  }
+  if (hashPart) {
+    dest.hash = hashPart;
+  }
+
   return Response.redirect(dest.toString(), 303);
+}
+
+function withSecurityHeaders(response: Response): Response {
+  // Response.redirect returns immutable responses; clone before setting headers.
+  const clone = new Response(response.body, response);
+  for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
+    clone.headers.set(name, value);
+  }
+  return clone;
 }

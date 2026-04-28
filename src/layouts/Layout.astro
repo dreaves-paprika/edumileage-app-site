@@ -6,7 +6,7 @@ interface Props {
 }
 
 const {
-  title = 'EDU Mileage+ — Mileage tracking built for K-12 educators',
+  title = 'EDU Mileage+ — Mileage tracking built for K-12 educators and staff',
   description = 'Automatically log every reimbursable mile between school sites. Built for the way district reimbursement actually works — IRS rates, multi-district support, approved distances, and audit-ready reports.',
   ogImage = '/og-image.png',
 } = Astro.props;
@@ -40,8 +40,44 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(ogImage, Astro.site).toString()} />
 
-    <!-- Cloudflare Web Analytics — privacy-respecting, no cookies, free -->
-    <!-- Token will be set by user in Cloudflare dashboard; remove or update src below if not enabled -->
+    <!-- Cloudflare Web Analytics is enabled via the Cloudflare dashboard for this Worker;
+         no script tag is required here. -->
+
+    <!-- JSON-LD: SoftwareApplication + Organization -->
+    <script type="application/ld+json" is:inline set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "EDU Mileage+",
+      "operatingSystem": "iOS 26",
+      "applicationCategory": "BusinessApplication",
+      "applicationSubCategory": "Mileage Tracking",
+      "description": description,
+      "url": "https://edumileage.app",
+      "image": new URL('/icon.png', Astro.site).toString(),
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Monthly subscription",
+          "price": "5.99",
+          "priceCurrency": "USD",
+          "category": "Subscription"
+        },
+        {
+          "@type": "Offer",
+          "name": "Annual subscription",
+          "price": "47.99",
+          "priceCurrency": "USD",
+          "category": "Subscription"
+        }
+      ],
+      "publisher": {
+        "@type": "Organization",
+        "name": "EDU Plus Apps",
+        "url": "https://eduplusapps.com",
+        "logo": new URL('/icon.png', Astro.site).toString(),
+        "email": "support@eduplusapps.com"
+      }
+    })} />
   </head>
   <body class="bg-white text-slate-900 font-sans selection:bg-brand-200 selection:text-brand-900">
     <slot />

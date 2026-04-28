@@ -4,7 +4,7 @@ const features = [
     label: 'Automatic',
     title: 'Drive between schools. The app does the rest.',
     body: 'Geofencing detects when you leave one site and arrive at another, then logs the trip with a GPS-measured route — no buttons, no apps to open, no end-of-month reconstruction. Stops are recognized automatically; drive-throughs don\'t become accidental trips.',
-    image: '/screenshots/01_Dashboard.png',
+    image: '/screenshots/01_Dashboard.webp',
     bullets: [
       'Background trip detection during your work schedule',
       'GPS route capture, not straight-line estimates',
@@ -15,7 +15,7 @@ const features = [
     label: 'District-aware',
     title: 'Built for how district reimbursement actually works.',
     body: 'Multiple districts, schedule-aware tracking, and district-approved distances per route. Trips outside your work hours are flagged for review. The IRS standard rate is built in, with per-district overrides if your employer reimburses differently.',
-    image: '/screenshots/02_Trips.png',
+    image: '/screenshots/02_Trips.webp',
     bullets: [
       'Multi-district support with separate reports per district',
       'District-approved mileage per route, not just GPS estimates',
@@ -26,7 +26,7 @@ const features = [
     label: 'Audit-ready',
     title: 'Reports that hold up under review.',
     body: 'Build a reimbursement report for any date range, review every trip, swipe to exclude, then approve. The IRS rate is locked at approval. Export to PDF (detailed or condensed), CSV, or generate a year-end IRS Annual Report covering every district.',
-    image: '/screenshots/04_Reports.png',
+    image: '/screenshots/04_Reports.webp',
     bullets: [
       'PDF, CSV, and IRS Annual Report exports',
       'Locked totals once a report is approved',
@@ -62,7 +62,7 @@ const features = [
             <ul class="mt-6 space-y-3">
               {feature.bullets.map((b) => (
                 <li class="flex items-start gap-3 text-slate-700">
-                  <svg class="w-5 h-5 text-brand-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-5 h-5 text-brand-600 mt-0.5 flex-shrink-0" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
                   </svg>
                   <span>{b}</span>
@@ -73,7 +73,7 @@ const features = [
           <div>
             <div class="relative mx-auto max-w-[300px] aspect-[886/1920] bg-slate-900 rounded-[2.5rem] p-1.5 shadow-xl ring-1 ring-slate-900/10">
               <div class="absolute inset-1.5 rounded-[2.2rem] overflow-hidden">
-                <img src={feature.image} alt={feature.title} class="w-full h-full object-cover" />
+                <img src={feature.image} alt={feature.title} width="886" height="1920" loading="lazy" decoding="async" class="w-full h-full object-cover" />
               </div>
             </div>
           </div>
