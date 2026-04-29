@@ -7,11 +7,21 @@ interface Props {
 
 const {
   title = 'EDU Mileage+ — Mileage tracking built for K-12 educators and staff',
-  description = 'Automatically log every reimbursable mile between school sites. Built for the way district reimbursement actually works — IRS rates, multi-district support, approved distances, and audit-ready reports.',
+  description = 'iPhone mileage tracker for K-12 educators and staff. Free for 30 trips — automatic GPS detection, IRS rates, multi-district support, approved distances, and audit-ready reports.',
   ogImage = '/og-image.png',
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const appStoreUrl = 'https://apps.apple.com/app/id6762212456';
+
+const screenshotFiles = [
+  '01_Dashboard.webp',
+  '02_Trips.webp',
+  '03_TripDetail.webp',
+  '04_Reports.webp',
+  '05_ReportDetail.webp',
+];
+const screenshots = screenshotFiles.map((f) => new URL(`/screenshots/${f}`, Astro.site).toString());
 ---
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth antialiased">
@@ -48,12 +58,23 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       "@context": "https://schema.org",
       "@type": "SoftwareApplication",
       "name": "EDU Mileage+",
+      "alternateName": "EDU Mileage Plus",
       "operatingSystem": "iOS 26",
       "applicationCategory": "BusinessApplication",
       "applicationSubCategory": "Mileage Tracking",
       "description": description,
       "url": "https://edumileage.app",
       "image": new URL('/icon.png', Astro.site).toString(),
+      "screenshot": screenshots,
+      "softwareVersion": "1.0",
+      "datePublished": "2026-04-29",
+      "downloadUrl": appStoreUrl,
+      "installUrl": appStoreUrl,
+      "keywords": "mileage tracker, school district, K-12, educator, teacher, paraprofessional, paraeducator, itinerant teacher, special education, district office, IRS standard mileage rate, GPS, automatic, reimbursement, iPhone, iOS",
+      "audience": {
+        "@type": "EducationalAudience",
+        "educationalRole": "K-12 school district employee"
+      },
       "offers": [
         {
           "@type": "Offer",
@@ -76,6 +97,25 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         "url": "https://eduplusapps.com",
         "logo": new URL('/icon.png', Astro.site).toString(),
         "email": "support@eduplusapps.com"
+      }
+    })} />
+
+    <!-- JSON-LD: VideoObject for product demo -->
+    <script type="application/ld+json" is:inline set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "VideoObject",
+      "name": "EDU Mileage+ product demo",
+      "description": "A 30-second walkthrough of EDU Mileage+ — automatic trip detection, multi-district support, and audit-ready reimbursement reports for K-12 educators and staff.",
+      "thumbnailUrl": new URL('/screenshots/01_Dashboard.webp', Astro.site).toString(),
+      "uploadDate": "2026-04-27",
+      "contentUrl": new URL('/video/Demo-final.mp4', Astro.site).toString(),
+      "embedUrl": "https://edumileage.app/#top",
+      "duration": "PT30S",
+      "publisher": {
+        "@type": "Organization",
+        "name": "EDU Plus Apps",
+        "url": "https://eduplusapps.com",
+        "logo": new URL('/icon.png', Astro.site).toString()
       }
     })} />
   </head>

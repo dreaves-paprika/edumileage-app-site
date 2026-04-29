@@ -97,4 +97,18 @@ const faqs = [
       More questions? <a href="https://eduplusapps.com/support/" rel="noopener" class="text-brand-700 font-semibold hover:underline">Visit Support</a> or email <a href="mailto:support@eduplusapps.com" class="text-brand-700 font-semibold hover:underline">support@eduplusapps.com</a>.
     </p>
   </div>
+
+  <!-- JSON-LD: FAQPage schema for rich results / People Also Ask -->
+  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map((item) => ({
+      "@type": "Question",
+      "name": item.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.a,
+      },
+    })),
+  })} />
 </section>
