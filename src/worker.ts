@@ -131,18 +131,18 @@ async function handleNotify(request: Request, env: Env, ctx: ExecutionContext): 
     env.WAITLIST.put(rateKey, '1', { expirationTtl: RATE_LIMIT_WINDOW_SECONDS }).catch(() => {});
   }
 
-  // Add contact to Loops and fire waitlist_signup event.
-  // waitUntil keeps the Worker alive until the fetch completes without
-  // delaying the redirect response to the user.
+  // Create contact in Loops via the contacts API — this triggers the
+  // "Contact added" Loop sequence (welcome email). The events/send endpoint
+  // creates contacts as a side effect but does NOT trigger that Loop trigger.
   if (env.LOOPS_API_KEY) {
     ctx.waitUntil(
-      fetch('https://app.loops.so/api/v1/events/send', {
+      fetch('https://app.loops.so/api/v1/contacts/create', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${env.LOOPS_API_KEY}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, eventName: 'waitlist_signup' }),
+        body: JSON.stringify({ email, source: 'waitlist' }),
       }).catch(() => {}),
     );
   }
