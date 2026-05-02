@@ -20,7 +20,7 @@ interface Env {
 const ALLOWED_HOSTS = new Set(['edumileage.app', 'www.edumileage.app']);
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MAX_BODY_BYTES = 2 * 1024;
-const RATE_LIMIT_WINDOW_SECONDS = 30;
+const RATE_LIMIT_WINDOW_SECONDS = 60; // Cloudflare KV minimum TTL is 60s
 
 const SECURITY_HEADERS: Record<string, string> = {
   'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
@@ -122,15 +122,13 @@ async function handleNotify(request: Request, env: Env): Promise<Response> {
 
   try {
     await env.WAITLIST.put(key, JSON.stringify(record));
-
-    if (ip) {
-      // Rate-limit token expires after the window; reads return null after.
-      await env.WAITLIST.put(rateKey, '1', {
-        expirationTtl: RATE_LIMIT_WINDOW_SECONDS,
-      });
-    }
   } catch {
     return redirect(request.url, '?notified=error');
+  }
+
+  // Rate limit write is best-effort — never blocks a successful signup.
+  if (ip) {
+    env.WAITLIST.put(rateKey, '1', { expirationTtl: RATE_LIMIT_WINDOW_SECONDS }).catch(() => {});
   }
 
   // Add contact to Loops and fire waitlist_signup event — non-blocking.
