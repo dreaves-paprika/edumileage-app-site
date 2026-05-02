@@ -27,6 +27,21 @@ const SECURITY_HEADERS: Record<string, string> = {
   'Referrer-Policy': 'strict-origin-when-cross-origin',
   'Permissions-Policy': 'geolocation=(), camera=(), microphone=(), interest-cohort=()',
   'X-Frame-Options': 'DENY',
+  // Report-Only CSP — monitoring violations before enforcement.
+  // Hashes cover the two is:inline scripts (GA4 config + Clarity init).
+  // Bundled Astro scripts are covered by 'self'. strict-dynamic lets hashed
+  // scripts load child scripts (gtag.js, clarity.ms) without a domain allowlist.
+  // https: fallback covers browsers that don't support strict-dynamic.
+  'Content-Security-Policy-Report-Only':
+    "default-src 'self'; " +
+    "script-src 'self' " +
+      "'sha256-FQ2sp7fTUWx4icCfKDESNl6O9o0Mcjs3vg8/X/+ZVGw=' " +
+      "'sha256-8r49ch0nUeIbr6ZR5sZnlO2u0FCTVu/1sVAmlDHKfJw=' " +
+      "'strict-dynamic' https:; " +
+    "object-src 'none'; " +
+    "base-uri 'none'; " +
+    "frame-ancestors 'none'; " +
+    "upgrade-insecure-requests;",
 };
 
 export default {
