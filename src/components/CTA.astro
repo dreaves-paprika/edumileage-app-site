@@ -90,6 +90,10 @@
       const cleanUrl = window.location.pathname + window.location.hash;
       window.history.replaceState({}, '', cleanUrl);
     }
+    // GA4: fire conversion event on successful waitlist signup
+    if (status === 'ok' && typeof gtag === 'function') {
+      gtag('event', 'waitlist_submit', { event_category: 'conversion' });
+    }
   }
 
   // Disable the submit button during submission to prevent double-posts.
