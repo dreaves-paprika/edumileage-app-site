@@ -50,8 +50,22 @@ const screenshots = screenshotFiles.map((f) => new URL(`/screenshots/${f}`, Astr
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(ogImage, Astro.site).toString()} />
 
-    <!-- Cloudflare Web Analytics is enabled via the Cloudflare dashboard for this Worker;
-         no script tag is required here. -->
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-786E2RTYD6"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-786E2RTYD6');
+    </script>
+
+    <!-- Cloudflare Web Analytics -->
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "c8a38bc1d7334c96a8e8bde2298c5b1c"}'></script>
+
+    <!-- Microsoft Clarity -->
+    <script is:inline>
+      (function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)})(window,document,"clarity","script","wkl115g83i");
+    </script>
 
     <!-- JSON-LD: SoftwareApplication + Organization -->
     <script type="application/ld+json" is:inline set:html={JSON.stringify({
