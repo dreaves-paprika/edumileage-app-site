@@ -46,13 +46,13 @@ const SECURITY_HEADERS: Record<string, string> = {
 };
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 
     let response: Response;
 
     if (url.pathname === '/api/notify' && request.method === 'POST') {
-      response = await handleNotify(request, env);
+      response = await handleNotify(request, env, ctx);
     } else {
       response = await env.ASSETS.fetch(request);
     }
@@ -61,7 +61,7 @@ export default {
   },
 };
 
-async function handleNotify(request: Request, env: Env): Promise<Response> {
+async function handleNotify(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   // Origin / Referer check — both should originate from our domain.
   if (!isAllowedOrigin(request)) {
     return redirect(request.url, '?notified=error');
@@ -131,17 +131,20 @@ async function handleNotify(request: Request, env: Env): Promise<Response> {
     env.WAITLIST.put(rateKey, '1', { expirationTtl: RATE_LIMIT_WINDOW_SECONDS }).catch(() => {});
   }
 
-  // Add contact to Loops and fire waitlist_signup event — non-blocking.
-  // A Loops failure never affects the user's submission.
+  // Add contact to Loops and fire waitlist_signup event.
+  // waitUntil keeps the Worker alive until the fetch completes without
+  // delaying the redirect response to the user.
   if (env.LOOPS_API_KEY) {
-    fetch('https://app.loops.so/api/v1/events/send', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${env.LOOPS_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, eventName: 'waitlist_signup' }),
-    }).catch(() => {});
+    ctx.waitUntil(
+      fetch('https://app.loops.so/api/v1/events/send', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${env.LOOPS_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, eventName: 'waitlist_signup' }),
+      }).catch(() => {}),
+    );
   }
 
   return redirect(request.url, '?notified=ok#cta');
