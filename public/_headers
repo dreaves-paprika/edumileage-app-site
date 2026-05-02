@@ -28,3 +28,6 @@
 
 /api/*
   Cache-Control: no-store
+
+/.well-known/security.txt
+  Cache-Control: no-store
