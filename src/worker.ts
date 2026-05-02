@@ -14,6 +14,7 @@
 interface Env {
   ASSETS: Fetcher;
   WAITLIST: KVNamespace;
+  LOOPS_API_KEY: string;
 }
 
 const ALLOWED_HOSTS = new Set(['edumileage.app', 'www.edumileage.app']);
@@ -130,6 +131,19 @@ async function handleNotify(request: Request, env: Env): Promise<Response> {
     }
   } catch {
     return redirect(request.url, '?notified=error');
+  }
+
+  // Add contact to Loops and fire waitlist_signup event — non-blocking.
+  // A Loops failure never affects the user's submission.
+  if (env.LOOPS_API_KEY) {
+    fetch('https://app.loops.so/api/v1/events/send', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${env.LOOPS_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, eventName: 'waitlist_signup' }),
+    }).catch(() => {});
   }
 
   return redirect(request.url, '?notified=ok#cta');
