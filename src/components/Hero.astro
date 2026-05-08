@@ -1,4 +1,5 @@
 ---
+const appStoreUrl = 'https://apps.apple.com/app/id6762212456?utm_source=website&utm_medium=web&utm_campaign=launch';
 ---
 <section id="top" class="relative pt-32 pb-20 overflow-hidden bg-gradient-to-b from-brand-50/60 via-white to-white">
   <!-- Decorative background -->
@@ -10,9 +11,9 @@
     <div class="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
       <!-- Left: copy -->
       <div>
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-100 text-brand-800 text-xs font-semibold tracking-wide uppercase mb-6">
-          <span class="w-1.5 h-1.5 rounded-full bg-brand-600 animate-pulse"></span>
-          Coming soon to the App Store
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold tracking-wide uppercase mb-6">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+          Now on the App Store
         </div>
 
         <h1 class="font-display text-5xl md:text-6xl lg:text-7xl font-bold tracking-tightest text-slate-900 leading-[1.05]">
@@ -25,8 +26,8 @@
         </p>
 
         <div class="mt-10 flex flex-col sm:flex-row gap-3">
-          <a href="#cta" data-ga-label="hero" class="inline-flex items-center justify-center gap-2 bg-brand-700 hover:bg-brand-800 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 text-white font-semibold px-7 py-3.5 rounded-full text-base transition shadow-lg shadow-brand-900/10 hover:shadow-xl hover:shadow-brand-900/20">
-            Get notified at launch
+          <a href={appStoreUrl} data-ga-label="hero_download" rel="noopener" class="inline-flex items-center justify-center gap-2 bg-brand-700 hover:bg-brand-800 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 text-white font-semibold px-7 py-3.5 rounded-full text-base transition shadow-lg shadow-brand-900/10 hover:shadow-xl hover:shadow-brand-900/20">
+            Download on the App Store
             <svg class="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
           </a>
           <a href="#how-it-works" class="inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-900 font-semibold px-7 py-3.5 rounded-full text-base transition border border-slate-300">

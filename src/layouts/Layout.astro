@@ -33,6 +33,9 @@ const screenshots = screenshotFiles.map((f) => new URL(`/screenshots/${f}`, Astr
     <link rel="apple-touch-icon" href="/icon.png" />
     <link rel="canonical" href={canonical} />
 
+    <!-- Smart App Banner — surfaces an "Open in App Store" banner on iOS Safari -->
+    <meta name="apple-itunes-app" content="app-id=6762212456" />
+
     <title>{title}</title>
     <meta name="description" content={description} />
 
@@ -95,7 +98,7 @@ const screenshots = screenshotFiles.map((f) => new URL(`/screenshots/${f}`, Astr
       "image": new URL('/icon.png', Astro.site).toString(),
       "screenshot": screenshots,
       "softwareVersion": "1.0",
-      "datePublished": "2026-04-29",
+      "datePublished": "2026-05-07",
       "downloadUrl": appStoreUrl,
       "installUrl": appStoreUrl,
       "keywords": "mileage tracker, school district, K-12, educator, teacher, paraprofessional, paraeducator, itinerant teacher, special education, district office, IRS standard mileage rate, GPS, automatic, reimbursement, iPhone, iOS",
