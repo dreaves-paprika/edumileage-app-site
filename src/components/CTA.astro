@@ -1,109 +1,31 @@
 ---
+const appStoreUrl = 'https://apps.apple.com/app/id6762212456?utm_source=website&utm_medium=web&utm_campaign=launch';
 ---
 <section id="cta" class="py-20 md:py-28">
   <div class="max-w-3xl mx-auto px-6">
     <div class="bg-gradient-to-br from-brand-700 to-brand-900 rounded-3xl p-10 md:p-14 text-center shadow-2xl shadow-brand-900/20">
       <h2 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white">
-        Be the first to know when it lands.
+        Ready to track every reimbursable mile?
       </h2>
       <p class="mt-5 text-lg text-brand-100 max-w-xl mx-auto">
-        Drop your email and we'll send a single message the day EDU Mileage+ goes live on the App Store. No newsletters. No spam.
+        EDU Mileage+ is now on the App Store. Free for 30 trips or 35 days — no credit card, no commitment.
       </p>
 
-      <form
-        id="notify-form"
-        class="mt-8 flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
-        action="/api/notify"
-        method="POST"
+      <a
+        href={appStoreUrl}
+        data-ga-label="cta_download"
+        rel="noopener"
+        class="mt-8 inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-900 text-brand-900 font-semibold px-7 py-3.5 rounded-full transition shadow-lg"
       >
-        <input
-          type="email"
-          name="email"
-          placeholder="you@yourschool.edu"
-          required
-          autocomplete="email"
-          aria-label="Email address"
-          class="flex-1 px-5 py-3.5 rounded-full text-slate-900 placeholder:text-slate-400 ring-1 ring-white/30 focus:ring-2 focus:ring-white focus:outline-none"
-        />
-        <!-- Honeypot — humans leave this empty; bots fill everything. -->
-        <input
-          type="text"
-          name="website"
-          tabindex="-1"
-          autocomplete="off"
-          aria-hidden="true"
-          style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;"
-        />
-        <button
-          id="notify-submit"
-          type="submit"
-          class="bg-white hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-900 text-brand-900 font-semibold px-7 py-3.5 rounded-full transition shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Notify me
-        </button>
-      </form>
+        Download on the App Store
+        <svg class="w-4 h-4" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </a>
 
-      <div id="notify-success" class="hidden mt-8 max-w-md mx-auto bg-white/10 backdrop-blur rounded-2xl p-6 ring-1 ring-white/20" role="status" aria-live="polite">
-        <div class="flex items-start gap-3">
-          <svg class="w-6 h-6 text-white flex-shrink-0 mt-0.5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
-          <div class="text-left">
-            <p class="font-semibold text-white">You're on the list.</p>
-            <p class="text-sm text-brand-100 mt-1">We'll send a single email the day EDU Mileage+ goes live. Thanks for the interest.</p>
-          </div>
-        </div>
-      </div>
-
-      <div id="notify-error" class="hidden mt-8 max-w-md mx-auto bg-red-500/20 backdrop-blur rounded-2xl p-6 ring-1 ring-red-300/30" role="alert">
-        <div class="flex items-start gap-3">
-          <svg class="w-6 h-6 text-white flex-shrink-0 mt-0.5" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M5 19h14a2 2 0 001.732-3L13.732 4a2 2 0 00-3.464 0L3.268 16A2 2 0 005 19z" />
-          </svg>
-          <div class="text-left">
-            <p class="font-semibold text-white">Something went wrong.</p>
-            <p class="text-sm text-brand-100 mt-1">Please try again, or email <a href="mailto:support@eduplusapps.com" class="underline">support@eduplusapps.com</a> directly.</p>
-          </div>
-        </div>
-      </div>
-
-      <p id="notify-fineprint" class="mt-4 text-sm text-brand-200">
-        We'll only ever email you about EDU Mileage+. Your email never leaves our system.
+      <p class="mt-6 text-sm text-brand-200">
+        Built for K-12 educators · Privacy-respecting · No analytics, no ads
       </p>
     </div>
   </div>
 </section>
-
-<script>
-  // Show success / error state after the Worker redirects back with a query param.
-  const params = new URLSearchParams(window.location.search);
-  const status = params.get('notified');
-  if (status === 'ok' || status === 'error') {
-    const form = document.getElementById('notify-form');
-    const fineprint = document.getElementById('notify-fineprint');
-    const target = document.getElementById(status === 'ok' ? 'notify-success' : 'notify-error');
-    if (form) form.classList.add('hidden');
-    if (fineprint) fineprint.classList.add('hidden');
-    if (target) target.classList.remove('hidden');
-    // Clean the URL so a refresh doesn't keep showing the message.
-    if (window.history.replaceState) {
-      const cleanUrl = window.location.pathname + window.location.hash;
-      window.history.replaceState({}, '', cleanUrl);
-    }
-    // GA4: fire conversion event on successful waitlist signup
-    if (status === 'ok' && typeof gtag === 'function') {
-      gtag('event', 'waitlist_submit', { event_category: 'conversion' });
-    }
-  }
-
-  // Disable the submit button during submission to prevent double-posts.
-  const form = document.getElementById('notify-form') as HTMLFormElement | null;
-  const submitButton = document.getElementById('notify-submit') as HTMLButtonElement | null;
-  if (form && submitButton) {
-    form.addEventListener('submit', () => {
-      submitButton.disabled = true;
-      submitButton.setAttribute('aria-busy', 'true');
-      submitButton.textContent = 'Submitting…';
-    });
-  }
-</script>
