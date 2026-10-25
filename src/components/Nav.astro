@@ -1,4 +1,5 @@
 ---
+const appStoreUrl = 'https://apps.apple.com/app/id6762212456?utm_source=website&utm_medium=web&utm_campaign=launch';
 ---
 <nav class="fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-white/80 border-b border-slate-200/60">
   <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -12,8 +13,8 @@
       <a href="#pricing" class="hover:text-slate-900 transition">Pricing</a>
       <a href="#faq" class="hover:text-slate-900 transition">FAQ</a>
     </div>
-    <a href="#cta" data-ga-label="nav" class="inline-flex items-center gap-2 bg-brand-700 hover:bg-brand-800 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 text-white text-sm font-semibold px-4 py-2 rounded-full transition">
-      Get notified
+    <a href={appStoreUrl} rel="noopener" class="inline-flex items-center gap-2 bg-brand-700 hover:bg-brand-800 focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 text-white text-sm font-semibold px-4 py-2 rounded-full transition">
+      Download
     </a>
   </div>
 </nav>
